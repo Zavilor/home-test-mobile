@@ -1,16 +1,16 @@
 # Home Test Mobile — Art Gallery (Appium + Java + TestNG)
 
-Automatización end-to-end de la app Android *Art Gallery* con Appium, Java 17, Maven y
-TestNG, usando Page Object Model. Cubre los 3 escenarios pedidos más el bonus de registro.
+End-to-end automation of the *Art Gallery* Android app with Appium, Java 17, Maven and
+TestNG, using the Page Object Model. Covers the 3 required scenarios plus the registration bonus.
 
-## Requisitos
+## Requirements
 
 - JDK 17 · Maven 3.9+ · Node.js 18+
-- Appium 3.x (server) + driver `uiautomator2`
-- Android SDK: `platform-tools` (adb), `emulator`, un AVD (API 34), `build-tools`
-- Variables: `JAVA_HOME`, `ANDROID_HOME`, y `platform-tools`/`emulator`/Maven en el `PATH`
+- Appium 3.x (server) + `uiautomator2` driver
+- Android SDK: `platform-tools` (adb), `emulator`, an AVD (API 34), `build-tools`
+- Environment: `JAVA_HOME`, `ANDROID_HOME`, and `platform-tools`/`emulator`/Maven on the `PATH`
 
-Instalar Appium y el driver:
+Install Appium and the driver:
 
 ```bash
 npm install -g appium
@@ -19,76 +19,76 @@ appium driver install uiautomator2
 
 ## APK
 
-Descargá `app-home-test-mobile.apk` de la
-[release del challenge](https://github.com/automationapptest/home-test-mobile/releases/tag/v1.0.0)
-y dejalo en `app/app-home-test.apk` (o pasá otra ruta con `-Dapp=...`). No se commitea (ver `.gitignore`).
+Download `app-home-test-mobile.apk` from the
+[challenge release](https://github.com/automationapptest/home-test-mobile/releases/tag/v1.0.0)
+and place it at `app/app-home-test.apk` (or pass a different path with `-Dapp=...`). It is not committed (see `.gitignore`).
 
-## Cómo correr
+## How to run
 
-La automatización mobile necesita 3 procesos: emulador + servidor Appium + los tests.
+Mobile automation needs 3 processes: emulator + Appium server + the tests.
 
 ```powershell
-# Terminal 1 — emulador
+# Terminal 1 — emulator
 emulator -avd appium_test
 
 # Terminal 2 — Appium
 appium
 
-# Terminal 3 — tests (verificar antes: adb devices)
+# Terminal 3 — tests (check first: adb devices)
 mvn clean test
 ```
 
-Atajo (levanta emulador + Appium si faltan y corre la suite):
+Shortcut (starts emulator + Appium if missing and runs the suite):
 
 ```powershell
 .\run-tests.ps1
 ```
 
-Un solo escenario:
+A single scenario:
 
 ```bash
 mvn clean test -Dtest=LoginTest
 ```
 
-## Escenarios
+## Scenarios
 
-| # | Escenario | Clase |
-|---|-----------|-------|
-| 1 | Login válido → catálogo | `LoginTest` |
-| 2 | Validación (campos vacíos / credenciales inválidas) | `LoginValidationTest` |
-| 3 | Scroll del catálogo hasta una obra puntual | `CatalogTest` |
-| 4 | (Bonus) Registro completo de usuario | `RegistrationTest` |
+| # | Scenario | Class |
+|---|----------|-------|
+| 1 | Valid login → catalog | `LoginTest` |
+| 2 | Validation (empty fields / invalid credentials) | `LoginValidationTest` |
+| 3 | Scroll the catalog to a specific art piece | `CatalogTest` |
+| 4 | (Bonus) Full user registration | `RegistrationTest` |
 
-Credenciales: `johndoe@email.com` / `123`.
+Credentials: `johndoe@email.com` / `123`.
 
-## Estructura
+## Structure
 
 ```
 src/test/java/com/automation/
-  config/AppiumConfig.java   capabilities y valores (overrideables con -D)
-  base/BaseTest.java         ciclo de vida del driver (sesión nueva por test)
+  config/AppiumConfig.java   capabilities and values (overridable with -D)
+  base/BaseTest.java         driver lifecycle (new session per test)
   pages/                     Page Objects (Login, Catalog, Register)
-  tests/                     una clase por escenario
+  tests/                     one class per scenario
 testng.xml                   suite
 ```
 
-## Decisiones de diseño
+## Design decisions
 
-- **Sesión nueva por test** → independencia entre tests (cada uno arranca en login).
-- **Esperas explícitas** (`WebDriverWait`), sin `Thread.sleep`.
-- **Locators por `accessibility id`** (testIDs de React Native); resource ids para diálogos nativos.
-- **Config externalizada** con system properties (`-D...`) → mismo código local y CI.
-- **Capturas automáticas** de tests fallidos en `target/screenshots/`.
+- **New session per test** → test independence (each one starts at login).
+- **Explicit waits** (`WebDriverWait`), no `Thread.sleep`.
+- **Locators by `accessibility id`** (React Native testIDs); resource ids for native dialogs.
+- **Externalized config** via system properties (`-D...`) → same code locally and in CI.
+- **Automatic screenshots** of failed tests in `target/screenshots/`.
 
-## Configuración
+## Configuration
 
-Todo es overrideable, p.ej.:
+Everything is overridable, e.g.:
 
 ```bash
 mvn clean test -Dapp=app/app-home-test.apk -DvalidEmail=johndoe@email.com -DvalidPassword=123
 ```
 
-## Reportes
+## Reports
 
 - HTML: `target/surefire-reports/emailable-report.html`
-- Capturas de fallos: `target/screenshots/`
+- Failure screenshots: `target/screenshots/`
