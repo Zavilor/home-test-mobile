@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Home Test Mobile - Art Gallery" verbose="1">
+
+    <test name="Authentication and Catalog">
+        <classes>
+            <class name="com.automation.tests.LoginTest"/>
+            <class name="com.automation.tests.LoginValidationTest"/>
+            <class name="com.automation.tests.CatalogTest"/>
+        </classes>
+    </test>
+
+    <test name="Bonus - Registration">
+        <classes>
+            <class name="com.automation.tests.RegistrationTest"/>
+        </classes>
+    </test>
+
+</suite>

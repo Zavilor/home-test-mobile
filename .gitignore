@@ -1,0 +1,20 @@
+# Maven
+target/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+
+# OS
+Thumbs.db
+.DS_Store
+
+# App binary (large; download from the release page - see README)
+app/*.apk
+
+# Appium / test artifacts
+*.log
